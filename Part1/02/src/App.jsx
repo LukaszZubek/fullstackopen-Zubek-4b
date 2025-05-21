@@ -1,5 +1,12 @@
 import { useState } from 'react'
 
+const Header = ({text}) => {
+  return(
+    <h1>
+      {text}
+    </h1>
+  )
+}
 const RandButton = ({min, max, setSelected}) => {
   return(
     <button onClick={() => setSelected(Math.floor(Math.random() * (max - min + 1)) + min)}>
@@ -35,11 +42,16 @@ const App = () => {
     copy[selected] += 1
     setVotes(copy)
   }
+
   return (
     <div>
+      <Header text="Anectode of the day" />
       <p>{anecdotes[selected]}</p>
       <p>has {votes[selected]} votes</p>
       <p><VoteButton vote={vote}/> <RandButton min={0} max={anecdotes.length - 1} setSelected={setSelected}/></p>
+      <Header text="Anectode with the most votes" />
+      <p>{anecdotes[votes.indexOf(Math.max(...votes))]}</p>
+      <p>has {Math.max(...votes)} votes</p>
     </div>
   )
 }
