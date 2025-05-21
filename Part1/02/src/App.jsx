@@ -4,17 +4,24 @@ const Stats = ({vars}) => {
   if(vars[3] > 0){
     return(
       <div>
-        <p>good {vars[0]}</p>
-        <p>neutral {vars[1]}</p>
-        <p>bad {vars[2]}</p>
-        <p>all {vars[3]}</p>
-        <p>average {(vars[0] + vars[2]) / vars[3]}</p>
-        <p>positive {(vars[0] / vars [3]) * 100}%</p>
+        <StatsContent statName="good" value={vars[0]} />
+        <StatsContent statName="neutral" value={vars[1]} />
+        <StatsContent statName="bad" value={vars[2]} />
+        <StatsContent statName="all" value={vars[3]} />
+        <StatsContent statName="average" value={(vars[0] + vars[2]) / vars[3]} />
+        <StatsContent statName="positive" value={((vars[0] / vars [3]) * 100) + "%"} />
       </div>
     )
   }
   else return(<div>No feedback given</div>)
 }
+
+const StatsContent = ({statName, value}) => {
+  return(
+    <p>{statName} {value}</p>
+  )
+}
+
 const Header = ({text}) => {
   return(
     <h1>
