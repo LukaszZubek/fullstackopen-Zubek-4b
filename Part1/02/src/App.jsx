@@ -3,14 +3,16 @@ import { useState } from 'react'
 const Stats = ({vars}) => {
   if(vars[3] > 0){
     return(
-      <div>
-        <StatsContent statName="good" value={vars[0]} />
-        <StatsContent statName="neutral" value={vars[1]} />
-        <StatsContent statName="bad" value={vars[2]} />
-        <StatsContent statName="all" value={vars[3]} />
-        <StatsContent statName="average" value={(vars[0] + vars[2]) / vars[3]} />
-        <StatsContent statName="positive" value={((vars[0] / vars [3]) * 100) + "%"} />
-      </div>
+      <table>
+        <tbody>
+          <StatsContent statName="good" value={vars[0]} />
+          <StatsContent statName="neutral" value={vars[1]} />
+          <StatsContent statName="bad" value={vars[2]} />
+          <StatsContent statName="all" value={vars[3]} />
+          <StatsContent statName="average" value={(vars[0] + vars[2]) / vars[3]} />
+          <StatsContent statName="positive" value={((vars[0] / vars [3]) * 100) + "%"} />
+        </tbody>
+      </table>
     )
   }
   else return(<div>No feedback given</div>)
@@ -18,7 +20,14 @@ const Stats = ({vars}) => {
 
 const StatsContent = ({statName, value}) => {
   return(
-    <p>{statName} {value}</p>
+    <tr>
+      <td>
+        {statName}
+      </td>
+      <td>
+        {value}
+      </td>
+    </tr>
   )
 }
 
