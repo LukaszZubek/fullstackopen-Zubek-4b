@@ -1,74 +1,31 @@
 import { useState } from 'react'
 
-const Stats = ({vars}) => {
-  if(vars[3] > 0){
-    return(
-      <table>
-        <tbody>
-          <StatsContent statName="good" value={vars[0]} />
-          <StatsContent statName="neutral" value={vars[1]} />
-          <StatsContent statName="bad" value={vars[2]} />
-          <StatsContent statName="all" value={vars[3]} />
-          <StatsContent statName="average" value={(vars[0] + vars[2]) / vars[3]} />
-          <StatsContent statName="positive" value={((vars[0] / vars [3]) * 100) + "%"} />
-        </tbody>
-      </table>
-    )
-  }
-  else return(<div>No feedback given</div>)
-}
-
-const StatsContent = ({statName, value}) => {
+const RandButton = ({min, max, setSelected}) => {
   return(
-    <tr>
-      <td>
-        {statName}
-      </td>
-      <td>
-        {value}
-      </td>
-    </tr>
-  )
-}
-
-const Header = ({text}) => {
-  return(
-    <h1>
-      {text}
-    </h1>
-  )
-}
-
-const FeedbackButton = ({variable, text}) => {
-  return(
-    <button onClick={variable}>
-      {text}
+    <button onClick={() => setSelected(Math.floor(Math.random() * (max - min + 1)) + min)}>
+      next anecdote
     </button>
   )
 }
 
-const FeedbackButtons = ({vars}) => {
-  return(
-    <div>
-      <FeedbackButton variable={vars[0]} text="good"/>
-      <FeedbackButton variable={vars[1]} text="neutral"/>
-      <FeedbackButton variable={vars[2]} text="bad"/>
-    </div>
-  )
-}
 const App = () => {
-
-  const [good, setGood] = useState(0)
-  const [neutral, setNeutral] = useState(0)
-  const [bad, setBad] = useState(0)
-  const [votes, setVotes] = useState(0)
+  const anecdotes = [
+    'If it hurts, do it more often.',
+    'Adding manpower to a late software project makes it later!',
+    'The first 90 percent of the code accounts for the first 90 percent of the development time...The remaining 10 percent of the code accounts for the other 90 percent of the development time.',
+    'Any fool can write code that a computer can understand. Good programmers write code that humans can understand.',
+    'Premature optimization is the root of all evil.',
+    'Debugging is twice as hard as writing the code in the first place. Therefore, if you write the code as cleverly as possible, you are, by definition, not smart enough to debug it.',
+    'Programming without an extremely heavy use of console.log is same as if a doctor would refuse to use x-rays or blood tests when diagnosing patients.',
+    'The only way to go fast, is to go well.'
+  ]
+   
+  const [selected, setSelected] = useState(0)
 
   return (
     <div>
-      <Header text="give feedback"/>
-      <FeedbackButtons vars={[() => {setGood(good + 1), setVotes(votes + 1)}, () => {setNeutral(neutral + 1), setVotes(votes + 1)}, () => {setBad(bad + 1), setVotes(votes + 1)}]} />
-      <Header text="statistics"/>
-      <Stats vars={[good, neutral, bad, votes]}/>
+      {anecdotes[selected]}
+      <p><RandButton min={0} max={anecdotes.length - 1} setSelected={setSelected}/></p>
     </div>
   )
 }
