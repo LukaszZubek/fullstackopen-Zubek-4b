@@ -1,16 +1,19 @@
 import { useState } from 'react'
 
 const Stats = ({vars}) => {
-  return(
-    <div>
-      <p>good {vars[0]}</p>
-      <p>neutral {vars[1]}</p>
-      <p>bad {vars[2]}</p>
-      <p>all {vars[3]}</p>
-      <p>average {(vars[0] + vars[2]) / vars[3]}</p>
-      <p>positive {(vars[0] / vars [3]) * 100}%</p>
-    </div>
-  )
+  if(vars[3] > 0){
+    return(
+      <div>
+        <p>good {vars[0]}</p>
+        <p>neutral {vars[1]}</p>
+        <p>bad {vars[2]}</p>
+        <p>all {vars[3]}</p>
+        <p>average {(vars[0] + vars[2]) / vars[3]}</p>
+        <p>positive {(vars[0] / vars [3]) * 100}%</p>
+      </div>
+    )
+  }
+  else return(<div>No feedback given</div>)
 }
 const Header = ({text}) => {
   return(
