@@ -8,6 +8,14 @@ const RandButton = ({min, max, setSelected}) => {
   )
 }
 
+const VoteButton = ({vote}) => {
+  return(
+    <button onClick={vote}>
+      vote
+    </button>
+  )
+}
+
 const App = () => {
   const anecdotes = [
     'If it hurts, do it more often.',
@@ -21,11 +29,17 @@ const App = () => {
   ]
    
   const [selected, setSelected] = useState(0)
-
+  const [votes, setVotes] = useState(Array(anecdotes.length).fill(0))
+  const vote = () => {
+    const copy = [...votes]
+    copy[selected] += 1
+    setVotes(copy)
+  }
   return (
     <div>
-      {anecdotes[selected]}
-      <p><RandButton min={0} max={anecdotes.length - 1} setSelected={setSelected}/></p>
+      <p>{anecdotes[selected]}</p>
+      <p>has {votes[selected]} votes</p>
+      <p><VoteButton vote={vote}/> <RandButton min={0} max={anecdotes.length - 1} setSelected={setSelected}/></p>
     </div>
   )
 }
