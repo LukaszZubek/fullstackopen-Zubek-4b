@@ -1,61 +1,54 @@
-const Header = (args) => {
-  return(
-    <h1>
-      {args.text}
-    </h1>
-  )
-}
-
-const Content = (args) => {
-  return(
-    <div>
-      <Part text={args.parts[0]} val={args.values[0]}/>
-      <Part text={args.parts[1]} val={args.values[1]}/>
-      <Part text={args.parts[2]} val={args.values[2]}/>
-    </div>
-  )
-}
-
-const Part = (args) => {
-  return(
-    <p>
-      {args.text} {args.val}
-    </p>
-  )
-}
-
-const Total = (args) => {
-  return(
-    <p>
-      {args.text} {args.sum}
-    </p>
-  )
-}
+import { useState } from 'react'
 
 const App = () => {
-  const course = {
-    name: 'Half Stack application development',
-    parts: [
-      {
-        name: 'Fundamentals of React',
-        exercises: 10
-      },
-      {
-        name: 'Using props to pass data',
-        exercises: 7
-      },
-      {
-        name: 'State of a component',
-        exercises: 14
-      }
-    ]
+
+  const [good, setGood] = useState(0)
+  const [neutral, setNeutral] = useState(0)
+  const [bad, setBad] = useState(0)
+
+
+  const Header = ({text}) => {
+    return(
+      <h1>
+        {text}
+      </h1>
+    )
+  }
+
+  const FeedbackButton = ({variable, text}) => {
+    return(
+      <button onClick={variable}>
+        {text}
+      </button>
+    )
+  }
+
+  const FeedbackButtons = ({vars}) => {
+    return(
+      <div>
+        <FeedbackButton variable={vars[0]} text="good"/>
+        <FeedbackButton variable={vars[1]} text="neutral"/>
+        <FeedbackButton variable={vars[2]} text="bad"/>
+      </div>
+    )
+  }
+
+  const Stats = ({vars}) => {
+    return(
+      <div>
+        <p>good {vars[0]}</p>
+        <p>neutral {vars[1]}</p>
+        <p>bad {vars[2]}</p>
+      </div>
+    )
   }
 
   return (
     <div>
-      <Header text={course.name}/>
-      <Content parts={[course.parts[0].name, course.parts[1].name, course.parts[2].name]} values={[course.parts[0].exercises, course.parts[1].exercises, course.parts[2].exercises]}/>
-      <Total text="Number of excercises" sum={course.parts[0].exercises + course.parts[1].exercises + course.parts[2].exercises}/>
+      <Header text="give feedback"/>
+      <FeedbackButtons vars={[() => setGood(good + 1), () => setNeutral(neutral + 1), () => setBad(neutral + 1)]} />
+      <Header text="statistics"/>
+      <Stats vars={[good, neutral, bad]}/>
     </div>
   )
 }
