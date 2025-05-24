@@ -1,11 +1,9 @@
-import Part from "./Part"
-import Total from "./Total"
+import Person from './Person'
 
-const Content = ({parts}) => {
+const Content = ({persons}) => {
     return(
         <div>
-            {parts.map(part => <Part key={part.id} name={part.name} exercises={part.exercises} />)}
-            <Total parts={parts}/>
+            {persons.map(person => <Person key={person.name} name={person.name} />)}
         </div>
     )
 }
