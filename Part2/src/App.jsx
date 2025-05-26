@@ -6,16 +6,24 @@ const App = () => {
     { 
       name: 'Arto Hellas',
       phone: '780 213 458'
+    },
+    { 
+      name: 'Marucha',
+      phone: '123 456 789'
     }
   ]) 
   const [newName, setNewName] = useState('')
   const [newPhone, setNewPhone] = useState('')
+  const [search, setSearch] = useState('')
 
   const handleNameImput = (event) => {
     setNewName(event.target.value)
   }
   const handlePhoneImput = (event) => {
     setNewPhone(event.target.value)
+  }
+  const handleSearchInput = (event) => {
+    setSearch(event.target.value)
   }
 
   const addPerson = (event) => {
@@ -40,6 +48,8 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      filter shown with <input value={search} onChange={handleSearchInput}/>
+      <h2>add a new</h2>
       <form>
         <div>
           name: <input value={newName} onChange={handleNameImput}/>
@@ -52,7 +62,7 @@ const App = () => {
         </div>
       </form>
       <h2>Numbers</h2>
-      <Content persons={persons} />
+      <Content persons={persons} search={search}/>
     </div>
     
   )
