@@ -28,21 +28,27 @@ const App = () => {
 
   const addPerson = (event) => {
     event.preventDefault()
-    if(!persons.some(person => person.name === newName))
+    if(!persons.some(person => person.phone === newPhone))
       {
-        if(!persons.some(person => person.phone === newPhone)){
+        if(!persons.some(person => person.name === newName)){
           const newPerson = {
             name: newName,
-            phone: newPhone,
-            id: (persons.length + 1).toString()
+            phone: newPhone
           }
-          personsService.create(newPerson).then(response => setPersons(persons.concat(newPerson)))
+
+          personsService.create(newPerson).then(() => setPersons(persons.concat(newPerson)))
         }
-        else
-          alert(`${newPhone} is already added to phonebook`)
+        else if(window.confirm(`${newName} is already added to phonebook, replace the old number with a new one?`)){
+          const newPerson = {
+            name: newName,
+            phone: newPhone
+          }
+
+          personsService.update(newPerson).then(() => setPersons(persons.map(p => p.id === newPerson.id ? newPerson : p)))
+        }
       }
     else
-      alert(`${newName} is already added to phonebook`)
+      alert(`${newPhone} is already added to phonebook`)
 
   }
 
