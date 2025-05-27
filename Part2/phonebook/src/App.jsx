@@ -20,7 +20,7 @@ const App = () => {
     setSearch(event.target.value)
   }
 
-  useEffect(() => {personsService.getAll().then(response => {setPersons(response)}).catch(() => {alert("error loading phonebook")})}, [])
+  useEffect(() => {personsService.getAll().then(response => {setPersons(response)}).catch(() => {newNotification("error loading phonebook", 5)})}, [])
 
   const newNotification = (text, time) => {
     setNotification(text)
@@ -42,6 +42,7 @@ const App = () => {
   }
   const addPerson = (event) => {
     event.preventDefault()
+    if(!persons.some(person => person.phone === newPhone))
     if(!persons.some(person => person.phone === newPhone))
       {
         if(!persons.some(person => person.name === newName)){
