@@ -1,17 +1,10 @@
 import { useState } from 'react'
 import Content from './components/Content'
+import personsService from './components/services/persons'
+import { useEffect } from 'react'
 
 const App = () => {
-  const [persons, setPersons] = useState([
-    { 
-      name: 'Arto Hellas',
-      phone: '780 213 458'
-    },
-    { 
-      name: 'Marucha',
-      phone: '123 456 789'
-    }
-  ]) 
+  const [persons, setPersons] = useState([]) 
   const [newName, setNewName] = useState('')
   const [newPhone, setNewPhone] = useState('')
   const [search, setSearch] = useState('')
@@ -26,6 +19,8 @@ const App = () => {
     setSearch(event.target.value)
   }
 
+  useEffect(() => {personsService.getAll().then(response => {setPersons(response)}).catch(() => {alert("error loading phonebook")})}, [])
+
   const addPerson = (event) => {
     event.preventDefault()
     if(!persons.some(person => person.name === newName))
@@ -33,9 +28,10 @@ const App = () => {
         if(!persons.some(person => person.phone === newPhone)){
           const newPerson = {
             name: newName,
-            phone: newPhone
+            phone: newPhone,
+            id: (persons.length + 1).toString()
           }
-          setPersons(persons.concat(newPerson))
+          personsService.create(newPerson).then(response => setPersons(persons.concat(newPerson)))
         }
         else
           alert(`${newPhone} is already added to phonebook`)
