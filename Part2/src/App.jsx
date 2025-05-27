@@ -19,6 +19,11 @@ const App = () => {
     setSearch(event.target.value)
   }
 
+  const removePerson = id => {
+    personsService.remove(id)
+    setPersons(persons.filter(p => p.id !== id))
+  }
+
   useEffect(() => {personsService.getAll().then(response => {setPersons(response)}).catch(() => {alert("error loading phonebook")})}, [])
 
   const addPerson = (event) => {
@@ -58,7 +63,7 @@ const App = () => {
         </div>
       </form>
       <h2>Numbers</h2>
-      <Content persons={persons} search={search}/>
+      <Content persons={persons} search={search} onDelete={removePerson}/>
     </div>
     
   )

@@ -1,6 +1,11 @@
-const Person = ({name, phone}) => {
+const Person = ({name, phone, id, onDelete}) => {
     return(
-        <p>{name} {phone}</p>
+        <p>
+            {name} {phone}
+            <button onClick={() => window.confirm(`Delete ${name}?`) ? onDelete(id) : []}>
+                delete
+            </button>
+        </p>
     )
 }
 
