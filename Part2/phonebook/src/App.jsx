@@ -43,7 +43,6 @@ const App = () => {
   const addPerson = (event) => {
     event.preventDefault()
     if(!persons.some(person => person.phone === newPhone))
-    if(!persons.some(person => person.phone === newPhone))
       {
         if(!persons.some(person => person.name === newName)){
           const newPerson = {
