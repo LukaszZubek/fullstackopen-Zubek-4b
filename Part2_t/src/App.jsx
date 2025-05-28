@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios'
 import Note from './components/Note'
+import Notification from './components/Notification'
+import Footer from './components/Footer'
 import noteService from './components/services/notes'
 
 
@@ -8,8 +10,20 @@ const App = () => {
   const [notes, setNotes] = useState([])
   const [newNote, setNewNote] = useState('')
   const [showAll, setShowAll] = useState(true)
+  const [errorMessage, setErrorMessage] = useState(null)
 
-  useEffect(() => {noteService.getAll().then(allNotes => setNotes(allNotes)).catch(() => {alert("couldnt load notes")})}, [])
+  useEffect(() => {
+    noteService.getAll()
+      .then(allNotes => setNotes(allNotes))
+      .catch(() => {
+        setErrorMessage("couldnt load notes"); setTimeout(
+          () => {
+            setErrorMessage(null)
+          }, 5000
+        );
+      })
+  }, [])
+
   console.log('render', notes.length, 'notes')
 
   const addNote = (event) => {
@@ -26,7 +40,12 @@ const App = () => {
         setNewNote('')
       }
     ).catch(
-      alert("note creation error")
+      () => {
+        setErrorMessage("Note creation error")
+        setTimeout(() => {
+          setErrorMessage(null)
+        }, 5000);
+      }
     )
   }
 
@@ -39,8 +58,11 @@ const App = () => {
     )
     .catch(
       () => {
-        alert(`note ${note.content} is already deleted`),
+        setErrorMessage(`note ${note.content} is already deleted`),
         setNotes(notes.filter(n => n.id !== id))
+        setTimeout(() => {
+          setErrorMessage(null)
+        }, 5000);
       }
     )
   }
@@ -55,6 +77,7 @@ const App = () => {
   return (
     <div>
       <h1>Notes</h1>
+      <Notification message={errorMessage} />
       <ul>
         {notesToShow.map(note => 
           <Note key={note.id} note={note} toggleImportance={() => toggleImportanceOf(note.id)}/>
@@ -69,7 +92,8 @@ const App = () => {
         <button type="button" onClick={() => setShowAll(!showAll)}>
           show {showAll ? "important" : "all"}
         </button>
-      </form>   
+      </form>
+      <Footer />
     </div>
   )
 }

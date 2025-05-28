@@ -8,24 +8,38 @@ const App = () => {
   const [newName, setNewName] = useState('')
   const [newPhone, setNewPhone] = useState('')
   const [search, setSearch] = useState('')
+  const [notification, setNotification] = useState(null)
 
-  const handleNameImput = (event) => {
+  const handleNameInput = (event) => {
     setNewName(event.target.value)
   }
-  const handlePhoneImput = (event) => {
+  const handlePhoneInput = (event) => {
     setNewPhone(event.target.value)
   }
   const handleSearchInput = (event) => {
     setSearch(event.target.value)
   }
 
+  useEffect(() => {personsService.getAll().then(response => {setPersons(response)}).catch(() => {alert("error loading phonebook")})}, [])
+
+  const newNotification = (text, time) => {
+    setNotification(text)
+    console.log(text, time)
+    setTimeout(() => {
+      setNotification(null)
+    }, time * 1000);
+  }
+
   const removePerson = id => {
     personsService.remove(id)
     setPersons(persons.filter(p => p.id !== id))
+    newNotification(`Removed ${persons.find(p => p.id === id).name}`, 5)
   }
-
-  useEffect(() => {personsService.getAll().then(response => {setPersons(response)}).catch(() => {alert("error loading phonebook")})}, [])
-
+  
+  const resetInput = () => {
+    setNewPhone('')
+    setNewName('')
+  }
   const addPerson = (event) => {
     event.preventDefault()
     if(!persons.some(person => person.phone === newPhone))
@@ -36,40 +50,40 @@ const App = () => {
             phone: newPhone
           }
 
-          personsService.create(newPerson).then(() => setPersons(persons.concat(newPerson)))
+          personsService.create(newPerson)
+            .then(
+              r => {
+                setPersons(persons.concat(r))
+                newNotification(`Added ${newName}`, 5)
+                resetInput()
+              }
+            )
         }
         else if(window.confirm(`${newName} is already added to phonebook, replace the old number with a new one?`)){
+          const personToUpdate = persons.find(p => p.name === newName)
+
           const newPerson = {
-            name: newName,
+            ...personToUpdate,
             phone: newPhone
           }
 
-          personsService.update(newPerson).then(() => setPersons(persons.map(p => p.id === newPerson.id ? newPerson : p)))
+          personsService.update(newPerson)
+            .then(
+              () => {
+                setPersons(persons.map(p => p.id === newPerson.id ? newPerson : p))
+                newNotification(`Updated ${newName} (${personToUpdate.phone} -> ${newPhone})`, 5)
+                resetInput()
+              }
+            )
         }
       }
     else
       alert(`${newPhone} is already added to phonebook`)
-
   }
 
   return (
     <div>
-      <h2>Phonebook</h2>
-      filter shown with <input value={search} onChange={handleSearchInput}/>
-      <h2>add a new</h2>
-      <form>
-        <div>
-          name: <input value={newName} onChange={handleNameImput}/>
-        </div>
-        <div>
-          phone: <input value={newPhone} onChange={handlePhoneImput}/>
-        </div>
-        <div>
-          <button type="submit" onClick={addPerson}>add</button>
-        </div>
-      </form>
-      <h2>Numbers</h2>
-      <Content persons={persons} search={search} onDelete={removePerson}/>
+      <Content persons={persons} values={{newName, newPhone, search}} notification={notification} handlers={{handleSearchInput, handleNameInput, handlePhoneInput, addPerson, removePerson}}/>
     </div>
     
   )
